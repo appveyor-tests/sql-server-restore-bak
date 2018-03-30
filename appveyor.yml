@@ -21,12 +21,10 @@ test_script:
       $conn = New-Object System.Data.SqlClient.SqlConnection
       $conn.ConnectionString = $env:connection_string_with_instance
       $conn.Open()
-      $cmd = New-Object System.Data.SqlClient.SqlCommand("SELECT * FROM information_schema.tables", $conn)
-      $reader = $cmd.ExecuteReader()
-      while($reader.Read())
-      {
-        Write-Host "Table: $($reader["table_name"])"
-      }
+      $cmd = New-Object System.Data.SqlClient.SqlCommand("Create database Northwind", $conn)
+      $cmd.ExecuteNonQuery()
+      $cmd = New-Object System.Data.SqlClient.SqlCommand("Restore database Northwind from disk='$env:appveyor_build_folder\northwind.bak' WITH REPLACE, move 'Northwind' to '$env:appveyor_build_folder\northwind.mdf', move 'Northwind_log' to '$env:appveyor_build_folder\northwind_log.ldf'", $conn)
+      $cmd.ExecuteNonQuery()
       $conn.Close()
 
 - dir
