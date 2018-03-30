@@ -1,0 +1,34 @@
+max_jobs: 1
+
+environment:
+  matrix:
+  - SQL_INSTANCE_NAME: SQL2016
+
+test_script:
+- ps: $ErrorActionPreference = "Stop"
+
+- ps: $env:isVs2017 = 'false'
+- ps: if (test-path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community") { $env:isVs2017 = 'true' }
+- ps: if ($env:isVs2017 -eq 'true' -and ($env:SQL_INSTANCE_NAME -eq 'SQL2008R2SP2' -or $env:SQL_INSTANCE_NAME -eq 'SQL2012SP1')) { Exit-AppveyorBuild }
+
+- 'echo Starting SQL Server instance: %SQL_INSTANCE_NAME%'
+- ps: Start-Service "MSSQL`$$env:SQL_INSTANCE_NAME"
+- sqlcmd -S localhost -U SA -P Password12! -Q "select @@VERSION"
+
+- echo Testing connectivity with named instance over named pipes
+- ps: $env:connection_string_with_instance = "Server=(local)\$env:SQL_INSTANCE_NAME;Database=master;User ID=sa;Password=Password12!"
+- ps: |
+      $conn = New-Object System.Data.SqlClient.SqlConnection
+      $conn.ConnectionString = $env:connection_string_with_instance
+      $conn.Open()
+      $cmd = New-Object System.Data.SqlClient.SqlCommand("SELECT * FROM information_schema.tables", $conn)
+      $reader = $cmd.ExecuteReader()
+      while($reader.Read())
+      {
+        Write-Host "Table: $($reader["table_name"])"
+      }
+      $conn.Close()
+
+- dir
+
+build: off
