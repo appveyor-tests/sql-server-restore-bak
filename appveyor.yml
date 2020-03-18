@@ -9,9 +9,8 @@ environment:
 test_script:
 - ps: $ErrorActionPreference = "Stop"
 
-- ps: $env:isVs2017 = 'false'
-- ps: if (test-path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community") { $env:isVs2017 = 'true' }
-- ps: if ($env:isVs2017 -eq 'true' -and ($env:SQL_INSTANCE_NAME -eq 'SQL2008R2SP2' -or $env:SQL_INSTANCE_NAME -eq 'SQL2012SP1')) { Exit-AppveyorBuild }
+- ps: if (test-path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community") { $env:SQL_INSTANCE_NAME = 'SQL2016' }
+- ps: if (test-path "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community") { $env:SQL_INSTANCE_NAME = 'SQL2017' }
 
 - 'echo Starting SQL Server instance: %SQL_INSTANCE_NAME%'
 - ps: Start-Service "MSSQL`$$env:SQL_INSTANCE_NAME"
