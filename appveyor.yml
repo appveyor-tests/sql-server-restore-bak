@@ -14,6 +14,7 @@ test_script:
 
 - 'echo Starting SQL Server instance: %SQL_INSTANCE_NAME%'
 - ps: Start-Service "MSSQL`$$env:SQL_INSTANCE_NAME"
+- ps: Get-Service "MSSQL`$$env:SQL_INSTANCE_NAME" | fl *
 - sqlcmd -S localhost -U SA -P Password12! -Q "select @@VERSION"
 
 - ps: whoami
