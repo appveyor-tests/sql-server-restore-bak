@@ -19,7 +19,8 @@ test_script:
 
 - ps: whoami
 - ps: dir
-- icacls northwind.bak
+- icacls c:\projects
+- icacls %appveyor_build_folder%
 
 - echo Testing connectivity with named instance over named pipes
 - ps: $env:connection_string_with_instance = "Server=(local)\$env:SQL_INSTANCE_NAME;Database=master;User ID=sa;Password=Password12!"
