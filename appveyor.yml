@@ -16,6 +16,7 @@ test_script:
 - ps: Start-Service "MSSQL`$$env:SQL_INSTANCE_NAME"
 - sqlcmd -S localhost -U SA -P Password12! -Q "select @@VERSION"
 
+- ps: whoami
 - ps: dir
 
 - echo Testing connectivity with named instance over named pipes
