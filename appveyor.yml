@@ -18,7 +18,7 @@ test_script:
 - sqlcmd -S localhost -U SA -P Password12! -Q "select @@VERSION"
 
 - ps: whoami
-- ps: dir
+- ps: dir c:\projects
 - icacls c:\projects
 - icacls %appveyor_build_folder%
 
