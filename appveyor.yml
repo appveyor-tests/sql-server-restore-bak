@@ -1,17 +1,17 @@
 max_jobs: 1
 
-image: Visual Studio 2022
+image: Visual Studio 2017
 
-#environment:
- # matrix:
-  #- SQL_INSTANCE_NAME: SQL2016
+environment:
+  matrix:
+  - SQL_INSTANCE_NAME: SQL2016
 
 test_script:
 - ps: $ErrorActionPreference = "Stop"
 
-#- ps: if (test-path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community") { $env:SQL_INSTANCE_NAME = 'SQL2016' }
-#- ps: if (test-path "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community") { $env:SQL_INSTANCE_NAME = 'SQL2017' }
-#- ps: if (test-path "C:\Program Files\Microsoft Visual Studio\2022\Community") { $env:SQL_INSTANCE_NAME = 'SQL2019' }
+- ps: if (test-path "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community") { $env:SQL_INSTANCE_NAME = 'SQL2016' }
+- ps: if (test-path "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community") { $env:SQL_INSTANCE_NAME = 'SQL2017' }
+- ps: if (test-path "C:\Program Files\Microsoft Visual Studio\2022\Community") { $env:SQL_INSTANCE_NAME = 'SQL2019' }
 
 - 'echo Starting SQL Server instance: %SQL_INSTANCE_NAME%'
 - ps: Start-Service "MSSQL`$$env:SQL_INSTANCE_NAME"
